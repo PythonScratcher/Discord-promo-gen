@@ -2,4 +2,4 @@
 
 idk 
 
-(click to go to it)[https://pythongithub.com/Discord-promo-gen]
+(click to go to it)[https://pythongithub.top/Discord-promo-gen]

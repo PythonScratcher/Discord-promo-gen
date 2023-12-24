@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>promo gen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    #output-container {
+      margin-top: 20px;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    #output {
+      width: 100%;
+      height: 200px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>discord promo gen</h1>
+
+  <label for="numCodes">promos to gen (1-50):</label>
+  <input type="number" id="numCodes" min="1" max="50" value="10">
+
+  <div id="output-container">
+    <textarea id="output" readonly></textarea>
+  </div>
+
+  <button onclick="generatePromoCodes()">gen</button>
+
+  <script>
+    function generatePromoCodes() {
+      const outputTextarea = document.getElementById('output');
+      outputTextarea.value = ''; // Clear previous output
+
+      const numCodesInput = document.getElementById('numCodes');
+      const numCodes = Math.min(50, Math.max(1, parseInt(numCodesInput.value))); // Cap at 50
+
+      const proxyUrl = 'https://cors-anywhere-web.up.railway.app/'; // CORS Anywhere proxy
+      const apiUrl = 'https://api.discord.gx.games/v1/direct-fulfillment';
+
+      for (let i = 0; i < numCodes; i++) {
+        // Generate a unique partnerUserId using a simple method (replace with a proper UUID generator)
+        const partnerUserId = generateUniqueId();
+        
+        // Create data object for the POST request
+        const data = {
+          partnerUserId: partnerUserId
+        };
+
+        // Make a POST request to the Discord API using the CORS Anywhere proxy
+        fetch(proxyUrl + apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Sec-Ch-Ua': '"Opera GX";v="105", "Chromium";v="119", "Not?A_Brand";v="24"',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 OPR/105.0.0.0'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error(`Request failed with status: ${response.status}`);
+          }
+        })
+        .then(json => {
+          const token = json.token;
+          if (token) {
+            const promoLink = `https://discord.com/billing/partner-promotions/1180231712274387115/${token}`;
+            outputTextarea.value += `${promoLink}\n`;
+          }
+        })
+        .catch(error => console.error(error));
+      }
+    }
+
+    function generateUniqueId() {
+      // Replace with a proper UUID generator
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0,
+              v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+  </script>
+
+</body>
+</html>

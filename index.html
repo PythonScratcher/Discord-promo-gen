@@ -69,7 +69,7 @@
           partnerUserId: partnerUserId
         };
 
-        // Make a POST request to the Discord API using the CORS Anywhere proxy
+        
         fetch(proxyUrl + apiUrl, {
           method: 'POST',
           headers: {
@@ -98,7 +98,6 @@
     }
 
     function generateUniqueId() {
-      // Replace with a proper UUID generator
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0,
               v = c === 'x' ? r : (r & 0x3 | 0x8);
